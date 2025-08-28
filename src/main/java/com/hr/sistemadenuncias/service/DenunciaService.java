@@ -42,4 +42,29 @@ public class DenunciaService {
     public Optional<Denuncia> findById(Long id) {
         return denunciaRepository.findById(id);
     }
+
+
+
+    //Método para atualizar uma denúncia por ID
+
+    public Optional<Denuncia> updateDenuncia(Long id, Denuncia denunciaAtualizada) {
+        Optional<Denuncia> denunciaExistente = denunciaRepository.findById(id);
+
+        if (denunciaExistente.isPresent()) {
+            Denuncia denuncia = denunciaExistente.get();
+            denuncia.setTitulo(denunciaAtualizada.getTitulo());
+            denuncia.setDescricao(denunciaAtualizada.getDescricao());
+            denuncia.setAnonima(denunciaAtualizada.isAnonima());
+            denuncia.setNomeDoador(denunciaAtualizada.getNomeDoador());
+            denuncia.setContatoDoador(denunciaAtualizada.getContatoDoador());
+            denuncia.setTipo(denunciaAtualizada.getTipo());
+            denuncia.setClassificacao(denunciaAtualizada.getClassificacao());
+
+            return Optional.of(denunciaRepository.save(denuncia));
+        }
+        return Optional.empty();
+    }
+
+
+
 }

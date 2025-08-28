@@ -15,6 +15,11 @@ import java.util.List; // Adicione esta linha
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 
+// Endpoint para atualizar uma denúncia por ID
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 @RestController
 @RequestMapping("/api/denuncias")
 public class DenunciaController {
@@ -42,6 +47,19 @@ public class DenunciaController {
     @GetMapping("/{id}")
     public ResponseEntity<Denuncia> buscarDenunciaPorId(@PathVariable Long id) {
         Optional<Denuncia> denuncia = denunciaService.findById(id);
+
+        if (denuncia.isPresent()) {
+            return ResponseEntity.ok(denuncia.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //... (Outros métodos GET e POST)
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Denuncia> atualizarDenuncia(@PathVariable Long id, @RequestBody Denuncia denunciaAtualizada) {
+        Optional<Denuncia> denuncia = denunciaService.updateDenuncia(id, denunciaAtualizada);
 
         if (denuncia.isPresent()) {
             return ResponseEntity.ok(denuncia.get());
