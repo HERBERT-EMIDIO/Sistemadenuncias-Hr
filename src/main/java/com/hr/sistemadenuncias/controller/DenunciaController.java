@@ -14,7 +14,6 @@ import java.util.List; // Adicione esta linha
 
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
-
 // Endpoint para atualizar uma denúncia por ID
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
