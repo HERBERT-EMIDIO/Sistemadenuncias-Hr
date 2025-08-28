@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List; // Adicione esta linha
 
+import org.springframework.web.bind.annotation.PathVariable;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/denuncias")
 public class DenunciaController {
@@ -33,6 +36,18 @@ public class DenunciaController {
     public ResponseEntity<List<Denuncia>> listarDenuncias() {
         List<Denuncia> denuncias = denunciaService.findAll();
         return ResponseEntity.ok(denuncias);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Denuncia> buscarDenunciaPorId(@PathVariable Long id) {
+        Optional<Denuncia> denuncia = denunciaService.findById(id);
+
+        if (denuncia.isPresent()) {
+            return ResponseEntity.ok(denuncia.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

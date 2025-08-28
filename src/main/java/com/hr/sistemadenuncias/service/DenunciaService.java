@@ -4,6 +4,7 @@ import com.hr.sistemadenuncias.model.Denuncia;
 import com.hr.sistemadenuncias.repository.DenunciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,5 +37,9 @@ public class DenunciaService {
     // Adicione este método para buscar todas as denúncias
     public List<Denuncia> findAll() {
         return denunciaRepository.findAll();
+    }
+
+    public Optional<Denuncia> findById(Long id) {
+        return denunciaRepository.findById(id);
     }
 }
