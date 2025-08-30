@@ -5,7 +5,6 @@ import com.hr.sistemadenuncias.repository.DenunciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,21 +19,16 @@ public class DenunciaService {
     }
 
     public Denuncia salvarDenuncia(Denuncia denuncia) {
-        // Lógica de negócio pode ser adicionada aqui, como validações ou regras
-        // Por exemplo, definir a data de criação
         denuncia.setDataHoraCriacao(LocalDateTime.now());
 
-        // Se a denúncia for anônima, garantimos que os campos de doador fiquem nulos
         if (denuncia.isAnonima()) {
             denuncia.setNomeDoador(null);
             denuncia.setContatoDoador(null);
         }
 
-        // Chamamos o método save do repositório para persistir a denúncia
         return denunciaRepository.save(denuncia);
     }
 
-    // Adicione este método para buscar todas as denúncias
     public List<Denuncia> findAll() {
         return denunciaRepository.findAll();
     }
@@ -42,29 +36,6 @@ public class DenunciaService {
     public Optional<Denuncia> findById(Long id) {
         return denunciaRepository.findById(id);
     }
-
-
-
-    //Método para atualizar uma denúncia por ID
-
-    public Optional<Denuncia> updateDenuncia(Long id, Denuncia denunciaAtualizada) {
-        Optional<Denuncia> denunciaExistente = denunciaRepository.findById(id);
-
-        if (denunciaExistente.isPresent()) {
-            Denuncia denuncia = denunciaExistente.get();
-            denuncia.setTitulo(denunciaAtualizada.getTitulo());
-            denuncia.setDescricao(denunciaAtualizada.getDescricao());
-            denuncia.setAnonima(denunciaAtualizada.isAnonima());
-            denuncia.setNomeDoador(denunciaAtualizada.getNomeDoador());
-            denuncia.setContatoDoador(denunciaAtualizada.getContatoDoador());
-            denuncia.setTipo(denunciaAtualizada.getTipo());
-            denuncia.setClassificacao(denunciaAtualizada.getClassificacao());
-
-            return Optional.of(denunciaRepository.save(denuncia));
-        }
-        return Optional.empty();
-    }
-
 
     // Método para atualizar uma denúncia por ID
     public Optional<Denuncia> updateDenuncia(Long id, Denuncia denunciaAtualizada) {
@@ -85,6 +56,12 @@ public class DenunciaService {
         return Optional.empty();
     }
 
-
-
+    // Método para deletar uma denúncia por ID
+    public boolean deleteDenuncia(Long id) {
+        if (denunciaRepository.existsById(id)) {
+            denunciaRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

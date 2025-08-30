@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List; // Adicione esta linha
 
 import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.Optional;
 // Endpoint para atualizar uma denúncia por ID
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 @RestController
 @RequestMapping("/api/denuncias")
@@ -62,6 +66,22 @@ public class DenunciaController {
 
         if (denuncia.isPresent()) {
             return ResponseEntity.ok(denuncia.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+
+    }
+
+    //... (Outros métodos GET, POST e PUT) obs; Ctrl + Alt + L
+
+    // Endpoint para deletar uma denúncia por ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarDenuncia(@PathVariable Long id) {
+        boolean isDeleted = denunciaService.deleteDenuncia(id);
+
+        if (isDeleted) {
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
