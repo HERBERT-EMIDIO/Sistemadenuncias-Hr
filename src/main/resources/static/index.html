@@ -6,43 +6,42 @@
     <title>Sistema de Denúncias</title>
 </head>
 <body>
-    <h1>Lista de Denúncias</h1>
-    <div id="denuncias-container">
-        </div>
+<h1>Lista de Denúncias</h1>
+<div id="denuncias-container">
+</div>
 
-    <hr>
+<hr>
 
-    <h2>Nova Denúncia</h2>
-    <form id="form-nova-denuncia">
-        <label for="titulo">Título:</label><br>
-        <input type="text" id="titulo" name="titulo"><br><br>
+<h2>Nova Denúncia</h2>
+<form id="form-nova-denuncia">
+    <label for="titulo">Título:</label><br>
+    <input type="text" id="titulo" name="titulo"><br><br>
 
-        <label for="descricao">Descrição:</label><br>
-        <textarea id="descricao" name="descricao"></textarea><br><br>
+    <label for="descricao">Descrição:</label><br>
+    <textarea id="descricao" name="descricao"></textarea><br><br>
 
-        <label for="nomeDoador">Seu nome (Opcional):</label><br>
-        <input type="text" id="nomeDoador" name="nomeDoador"><br><br>
+    <label for="nomeDoador">Seu nome (Opcional):</label><br>
+    <input type="text" id="nomeDoador" name="nomeDoador"><br><br>
 
-        <label for="contatoDoador">Seu e-mail (Opcional):</label><br>
-        <input type="email" id="contatoDoador" name="contatoDoador"><br><br>
+    <label for="contatoDoador">Seu e-mail (Opcional):</label><br>
+    <input type="email" id="contatoDoador" name="contatoDoador"><br><br>
 
-        <label for="tipo">Tipo:</label><br>
-        <select id="tipo" name="tipo">
-            <option value="EVENTO ADVERSO">Evento Adverso</option>
-            <option value="VIOLENCIA">Violência</option>
-            <option value="MAU_TRATO">Mau Trato</option>
-        </select><br><br>
+    <label for="tipo">Tipo:</label><br>
+    <select id="tipo" name="tipo">
+        <option value="EVENTO_ADVERSO">Evento Adverso</option>
+        <option value="QUEIXA_TECNICA">Queixa Técnica</option>
+    </select><br><br>
 
-        <label for="classificacao">Classificação:</label><br>
-        <select id="classificacao" name="classificacao">
-            <option value="LEVE">Leve</option>
-            <option value="MODERADA">Moderada</option>
-            <option value="GRAVE">Grave</option>
-        </select><br><br>
+    <label for="classificacao">Classificação:</label><br>
+    <select id="classificacao" name="classificacao">
+        <option value="LEVE">Leve</option>
+        <option value="MODERADA">Moderada</option>
+        <option value="GRAVE">Grave</option>
+    </select><br><br>
 
-        <button type="submit">Enviar Denúncia</button>
-    </form>
+    <button type="submit" id="form-button">Enviar Denúncia</button>
+</form>
 
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

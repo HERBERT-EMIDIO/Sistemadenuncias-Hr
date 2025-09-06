@@ -32,7 +32,7 @@ async function carregarDenuncias() {
 
 // Função para enviar uma nova denúncia
 async function enviarDenuncia(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
+    event.preventDefault();
 
     const form = document.getElementById('form-nova-denuncia');
     const denuncia = {
