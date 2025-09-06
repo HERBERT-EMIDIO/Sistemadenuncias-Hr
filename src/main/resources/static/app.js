@@ -1,12 +1,4 @@
-const denuncia = {
-        titulo: form.titulo.value,
-        descricao: form.descricao.value,
-        nomeDoador: form.nomeDoador.value,
-        // Campos que precisam ser ajustados:
-        anonima: false,
-        tipo: "EVENTO ADVERSO",
-        classificacao: "LEVE"
-    };// Função para carregar e exibir as denúncias
+// Função para carregar e exibir as denúncias
 async function carregarDenuncias() {
     const container = document.getElementById('denuncias-container');
     container.innerHTML = 'Carregando...';
@@ -26,6 +18,7 @@ async function carregarDenuncias() {
                     <h3>${denuncia.titulo}</h3>
                     <p>ID: ${denuncia.id}</p>
                     <p>Descrição: ${denuncia.descricao}</p>
+                    <button onclick="excluirDenuncia(${denuncia.id})">Excluir</button>
                     <hr>
                 `;
                 container.appendChild(denunciaDiv);
@@ -71,6 +64,33 @@ async function enviarDenuncia(event) {
     } catch (error) {
         console.error('Erro:', error);
         alert('Ocorreu um erro ao enviar a denúncia. Verifique a conexão com o servidor.');
+    }
+}
+
+// --- NOVO CÓDIGO PARA DELETAR ---
+
+// Função para excluir uma denúncia
+async function excluirDenuncia(id) {
+    if (!confirm('Tem certeza que deseja excluir esta denúncia?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8081/api/denuncias/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.status === 204) { // 204 No Content é o status esperado para uma exclusão bem-sucedida
+            alert('Denúncia excluída com sucesso!');
+            carregarDenuncias(); // Recarrega a lista para refletir a exclusão
+        } else if (response.status === 404) {
+            alert('Denúncia não encontrada.');
+        } else {
+            alert('Erro ao excluir denúncia.');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Ocorreu um erro ao tentar excluir a denúncia. Verifique a conexão com o servidor.');
     }
 }
 

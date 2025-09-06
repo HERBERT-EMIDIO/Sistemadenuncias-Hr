@@ -1,5 +1,7 @@
 package com.hr.sistemadenuncias.controller;
 
+
+
 import com.hr.sistemadenuncias.model.Denuncia;
 import com.hr.sistemadenuncias.service.DenunciaService;
 import org.springframework.beans.factory.annotation.Autowired;

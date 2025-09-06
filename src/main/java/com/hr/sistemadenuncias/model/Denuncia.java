@@ -41,4 +41,11 @@ public class Denuncia {
 
     private String setorResponsavel;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }
