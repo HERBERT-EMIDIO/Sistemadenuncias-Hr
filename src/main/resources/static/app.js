@@ -1,3 +1,6 @@
+// Variável global para armazenar o ID da denúncia em edição
+let denunciaEmEdicaoId = null;
+
 // Função para carregar e exibir as denúncias
 async function carregarDenuncias() {
     const container = document.getElementById('denuncias-container');
@@ -18,6 +21,7 @@ async function carregarDenuncias() {
                     <h3>${denuncia.titulo}</h3>
                     <p>ID: ${denuncia.id}</p>
                     <p>Descrição: ${denuncia.descricao}</p>
+                    <button onclick="preencherFormularioParaEdicao(${denuncia.id})">Editar</button>
                     <button onclick="excluirDenuncia(${denuncia.id})">Excluir</button>
                     <hr>
                 `;
@@ -30,8 +34,8 @@ async function carregarDenuncias() {
     }
 }
 
-// Função para enviar uma nova denúncia
-async function enviarDenuncia(event) {
+// Função para enviar uma nova denúncia ou atualizar uma existente
+async function enviarOuAtualizarDenuncia(event) {
     event.preventDefault();
 
     const form = document.getElementById('form-nova-denuncia');
@@ -45,21 +49,32 @@ async function enviarDenuncia(event) {
         classificacao: form.classificacao.value
     };
 
+    let url = 'http://localhost:8081/api/denuncias';
+    let method = 'POST';
+
+    // Se estiver em modo de edição, muda para o método PUT
+    if (denunciaEmEdicaoId) {
+        url = `${url}/${denunciaEmEdicaoId}`;
+        method = 'PUT';
+    }
+
     try {
-        const response = await fetch('http://localhost:8081/api/denuncias', {
-            method: 'POST',
+        const response = await fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(denuncia)
         });
 
-        if (response.status === 201) {
-            alert('Denúncia criada com sucesso!');
-            form.reset(); // Limpa o formulário
-            carregarDenuncias(); // Recarrega a lista de denúncias
+        if (response.ok) { // Status 200 para PUT, 201 para POST
+            alert(`Denúncia ${denunciaEmEdicaoId ? 'atualizada' : 'criada'} com sucesso!`);
+            form.reset();
+            denunciaEmEdicaoId = null; // Reseta o modo de edição
+            document.getElementById('form-button').textContent = 'Enviar Denúncia'; // Volta o texto do botão
+            carregarDenuncias();
         } else {
-            alert('Erro ao criar denúncia. Verifique se todos os campos estão corretos.');
+            alert('Erro ao processar denúncia. Verifique se os campos estão corretos.');
         }
     } catch (error) {
         console.error('Erro:', error);
@@ -67,7 +82,41 @@ async function enviarDenuncia(event) {
     }
 }
 
-// --- NOVO CÓDIGO PARA DELETAR ---
+
+// --- CÓDIGO PARA EDIÇÃO ---
+
+// Função para buscar os dados de uma denúncia e preencher o formulário
+async function preencherFormularioParaEdicao(id) {
+    try {
+        const response = await fetch(`http://localhost:8081/api/denuncias/${id}`);
+        if (!response.ok) {
+            throw new Error('Denúncia não encontrada');
+        }
+        const denuncia = await response.json();
+
+        // Preenche os campos do formulário
+        document.getElementById('titulo').value = denuncia.titulo;
+        document.getElementById('descricao').value = denuncia.descricao;
+        document.getElementById('nomeDoador').value = denuncia.nomeDoador || '';
+        document.getElementById('contatoDoador').value = denuncia.contatoDoador || '';
+        document.getElementById('tipo').value = denuncia.tipo;
+        document.getElementById('classificacao').value = denuncia.classificacao;
+
+        // Armazena o ID da denúncia para o modo de edição
+        denunciaEmEdicaoId = id;
+        document.getElementById('form-button').textContent = 'Atualizar Denúncia';
+
+        // Rolamos a página para o formulário
+        document.getElementById('form-nova-denuncia').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (error) {
+        console.error('Erro ao buscar denúncia para edição:', error);
+        alert('Erro ao carregar os dados da denúncia para edição.');
+    }
+}
+
+
+// --- CÓDIGO PARA DELETAR ---
 
 // Função para excluir uma denúncia
 async function excluirDenuncia(id) {
@@ -80,9 +129,9 @@ async function excluirDenuncia(id) {
             method: 'DELETE'
         });
 
-        if (response.status === 204) { // 204 No Content é o status esperado para uma exclusão bem-sucedida
+        if (response.status === 204) {
             alert('Denúncia excluída com sucesso!');
-            carregarDenuncias(); // Recarrega a lista para refletir a exclusão
+            carregarDenuncias();
         } else if (response.status === 404) {
             alert('Denúncia não encontrada.');
         } else {
@@ -99,4 +148,4 @@ async function excluirDenuncia(id) {
 window.onload = carregarDenuncias;
 
 // Adicione o ouvinte de evento para o formulário
-document.getElementById('form-nova-denuncia').addEventListener('submit', enviarDenuncia);
+document.getElementById('form-nova-denuncia').addEventListener('submit', enviarOuAtualizarDenuncia);
